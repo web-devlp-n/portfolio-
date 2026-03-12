@@ -1,0 +1,163 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>V. Pratyuday | Web Designer</title>
+<style>
+body{font-family:Arial,Helvetica,sans-serif;margin:0;background:#0f172a;color:white}
+header{padding:40px;text-align:center;background:linear-gradient(135deg,#1e293b,#0f172a)}
+header h1{font-size:40px;margin:0}
+header p{opacity:.9}
+section{padding:50px 10%}
+.skills span{display:inline-block;background:#1e293b;padding:10px 15px;border-radius:8px;margin:5px}
+.projects{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;margin-top:20px}
+.card{background:#1e293b;padding:20px;border-radius:12px}
+.card h3{margin:0 0 10px 0}
+button{padding:10px 18px;border:none;border-radius:8px;background:#38bdf8;color:black;font-weight:bold;cursor:pointer;margin-top:10px}
+.admin-panel{display:none;margin-top:25px;background:#1e293b;padding:20px;border-radius:10px}
+input{padding:10px;margin:6px;border-radius:6px;border:none;width:230px}
+a{color:#38bdf8;text-decoration:none;font-weight:bold}
+a:hover{text-decoration:underline}
+footer{text-align:center;padding:25px;background:#020617;margin-top:40px}
+.insta{display:flex;justify-content:center;align-items:center;gap:10px;margin-top:10px}
+.insta svg{width:24px;height:24px;fill:#38bdf8}
+.note{margin-top:15px;font-size:14px;opacity:.8}
+</style>
+</head>
+<body><header>
+<h1>V. Pratyuday</h1>
+<p>Web Designer / Front-End Developer</p>
+<p>I create modern websites for businesses in India</p>
+<button onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Contact Me</button>
+</header><section>
+<h2>About Me</h2>
+<p>I am a web designer from Hyderabad. I create responsive and modern websites for businesses with clean layouts and good user experience.</p>
+<p class="note">Websites are delivered using GitHub Pages (github.io). No SEO or Google search indexing included.</p>
+</section><section>
+<h2>Skills</h2>
+<div class="skills">
+<span>HTML</span>
+<span>CSS</span>
+<span>JavaScript (Intermediate)</span>
+<span>Responsive Design</span>
+<span>Photoshop</span>
+</div>
+</section><section>
+<h2>Projects</h2><div id="projectList" class="projects"></div><button id="adminBtn">Admin</button>
+
+<div class="admin-panel" id="adminPanel">
+<h3>Admin Panel</h3>
+<input id="projectName" placeholder="Project Name">
+<input id="projectLink" placeholder="Project Link https://...">
+<br>
+<button id="addProjectBtn">Add Project</button>
+</div></section><section id="contact">
+<h2>Need a Website for Your Business?</h2>
+<p>Contact <b>web.devlp.n</b> through Instagram.</p><div class="insta">
+<svg viewBox="0 0 24 24">
+<path d="M7 2C4.2 2 2 4.2 2 7v10c0 2.8 2.2 5 5 5h10c2.8 0 5-2.2 5-5V7c0-2.8-2.2-5-5-5H7zm0 2h10c1.7 0 3 1.3 3 3v10c0 1.7-1.3 3-3 3H7c-1.7 0-3-1.3-3-3V7c0-1.7 1.3-3 3-3zm5 3.5A5.5 5.5 0 1 0 17.5 13 5.5 5.5 0 0 0 12 7.5zm0 2A3.5 3.5 0 1 1 8.5 13 3.5 3.5 0 0 1 12 9.5zM18 6.3a1.3 1.3 0 1 0 1.3 1.3A1.3 1.3 0 0 0 18 6.3z"/>
+</svg>
+<a href="https://instagram.com/web.devlp.n" target="_blank">instagram.com/web.devlp.n</a>
+</div></section><footer>
+<p>© 2026 V. Pratyuday</p>
+</footer><script>
+
+const PASSWORD = "admin123";
+let isAdmin = false;
+
+function renderProjects(){
+
+const container = document.getElementById("projectList");
+const projects = JSON.parse(localStorage.getItem("projects") || "[]");
+
+container.innerHTML = "";
+
+projects.forEach((p,index)=>{
+
+const card = document.createElement("div");
+card.className = "card";
+
+let html = `<h3>${p.name}</h3>
+<a href="${p.link}" target="_blank">Visit Website</a>`;
+
+if(isAdmin){
+html += `<br><button onclick="removeProject(${index})">Remove</button>`;
+}
+
+card.innerHTML = html;
+container.appendChild(card);
+
+});
+
+}
+
+function addProject(){
+
+const nameInput = document.getElementById("projectName");
+const linkInput = document.getElementById("projectLink");
+
+const name = nameInput.value.trim();
+const link = linkInput.value.trim();
+
+if(!name || !link){
+alert("Enter project name and link");
+return;
+}
+
+const projects = JSON.parse(localStorage.getItem("projects") || "[]");
+
+projects.push({name:name,link:link});
+
+localStorage.setItem("projects", JSON.stringify(projects));
+
+nameInput.value = "";
+linkInput.value = "";
+
+alert("Project added successfully");
+
+renderProjects();
+
+}
+
+function removeProject(index){
+
+const projects = JSON.parse(localStorage.getItem("projects") || "[]");
+projects.splice(index,1);
+
+localStorage.setItem("projects", JSON.stringify(projects));
+
+renderProjects();
+
+}
+
+function adminLogin(){
+
+const pass = prompt("Enter Admin Password");
+
+if(pass === PASSWORD){
+
+isAdmin = true;
+
+document.getElementById("adminPanel").style.display = "block";
+
+renderProjects();
+
+}else{
+
+alert("Wrong password");
+
+}
+
+}
+
+// events
+
+document.getElementById("adminBtn").addEventListener("click", adminLogin);
+document.getElementById("addProjectBtn").addEventListener("click", addProject);
+
+// initial load
+
+renderProjects();
+
+</script></body>
+</html>
